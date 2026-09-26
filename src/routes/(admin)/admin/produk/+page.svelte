@@ -1,0 +1,48 @@
+<script lang="ts">
+	let { data } = $props();
+	import { buttonVariants } from '$lib/components/ui/button';
+	import * as Table from '$lib/components/ui/table';
+
+	const formatRupiah = (val: number) =>
+		new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
+</script>
+
+<div class="flex items-center justify-between mb-6">
+	<h1 class="text-3xl font-bold tracking-tight">Data Produk</h1>
+	<a href="/admin/produk/tambah" class={buttonVariants()}>Tambah Produk</a>
+</div>
+
+<div class="rounded-md border bg-white">
+	<Table.Root>
+		<Table.Header>
+			<Table.Row>
+				<Table.Head>Kode</Table.Head>
+				<Table.Head>Nama Produk</Table.Head>
+				<Table.Head>Brand</Table.Head>
+				<Table.Head>Ukuran</Table.Head>
+				<Table.Head>Harga Beli</Table.Head>
+				<Table.Head>Harga Jual</Table.Head>
+				<Table.Head class="text-right">Aksi</Table.Head>
+			</Table.Row>
+		</Table.Header>
+		<Table.Body>
+			{#each data.products as product (product.id)}
+				<Table.Row>
+					<Table.Cell class="font-medium">{product.code}</Table.Cell>
+					<Table.Cell>{product.name}</Table.Cell>
+					<Table.Cell>{product.brand || '-'}</Table.Cell>
+					<Table.Cell>{product.size || '-'}</Table.Cell>
+					<Table.Cell>{formatRupiah(product.buyPrice)}</Table.Cell>
+					<Table.Cell>{formatRupiah(product.sellPrice)}</Table.Cell>
+					<Table.Cell class="text-right">
+						<a href="/admin/produk/{product.id}/edit" class={buttonVariants({ variant: 'outline', size: 'sm' })}>Edit</a>
+					</Table.Cell>
+				</Table.Row>
+			{:else}
+				<Table.Row>
+					<Table.Cell colspan={7} class="h-24 text-center">Belum ada data produk.</Table.Cell>
+				</Table.Row>
+			{/each}
+		</Table.Body>
+	</Table.Root>
+</div>
