@@ -1,19 +1,19 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { userSchema } from '$lib/schemas/user.schema';
 import { auth } from '$lib/server/auth';
 import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(zod(userSchema))
+		form: await superValidate(zod4(userSchema))
 	};
 };
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate(event, zod(userSchema));
+		const form = await superValidate(event, zod4(userSchema));
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -30,7 +30,10 @@ export const actions: Actions = {
 			});
 
 			if (!res?.user?.id) {
-				return fail(500, { form, message: 'Gagal membuat akun kasir (username mungkin sudah terpakai).' });
+				return fail(500, {
+					form,
+					message: 'Gagal membuat akun kasir (username mungkin sudah terpakai).'
+				});
 			}
 		} catch (error: any) {
 			return fail(500, { form, message: error.message || 'Terjadi kesalahan internal.' });

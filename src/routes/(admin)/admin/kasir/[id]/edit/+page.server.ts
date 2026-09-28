@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { userEditSchema } from '$lib/schemas/user.schema';
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/server/db';
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const form = await superValidate({
 		name: existingUser.name,
 		username: existingUser.username || ''
-	}, zod(userEditSchema));
+	}, zod4(userEditSchema));
 	
 	return {
 		form,
@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
 	default: async (event) => {
 		const id = event.params.id;
-		const form = await superValidate(event, zod(userEditSchema));
+		const form = await superValidate(event, zod4(userEditSchema));
 		
 		if (!form.valid) return fail(400, { form });
 

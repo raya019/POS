@@ -33,12 +33,16 @@ const auth = betterAuth({
 async function main() {
 	console.log('Seeding first admin account...');
 	try {
+		await db.delete(schema.session);
+		await db.delete(schema.account);
+		await db.delete(schema.user);
+		
 		const res = await auth.api.signUpEmail({
 			body: {
 				email: 'admin@toko.local',
 				username: 'admin',
 				name: 'Admin Owner',
-				password: 'ganti-saat-pertama-login'
+				password: 'password123'
 			}
 		});
 
@@ -49,7 +53,7 @@ async function main() {
 				.where(eq(user.id, res.user.id));
 			console.log('✅ Admin account created successfully.');
 			console.log('Username: admin');
-			console.log('Password: ganti-saat-pertama-login');
+			console.log('Password: password123');
 		} else {
 			console.error('Failed to create admin account.');
 		}

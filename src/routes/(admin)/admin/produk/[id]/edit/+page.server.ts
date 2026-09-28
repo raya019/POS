@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { productSchema } from '$lib/schemas/product.schema';
 import { db } from '$lib/server/db';
 import { products } from '$lib/server/db/schema';
@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const [product] = await db.select().from(products).where(eq(products.id, id));
 	if (!product) error(404, 'Produk tidak ditemukan');
 
-	const form = await superValidate(product, zod(productSchema));
+	const form = await superValidate(product, zod4(productSchema));
 	
 	return {
 		form,
@@ -27,7 +27,7 @@ export const actions: Actions = {
 		const id = parseInt(event.params.id);
 		if (isNaN(id)) return fail(400, { message: 'Invalid ID' });
 
-		const form = await superValidate(event, zod(productSchema));
+		const form = await superValidate(event, zod4(productSchema));
 		if (!form.valid) {
 			return fail(400, { form });
 		}

@@ -1,6 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { productSchema } from '$lib/schemas/product.schema';
 import { db } from '$lib/server/db';
 import { products } from '$lib/server/db/schema';
@@ -8,13 +8,13 @@ import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(zod(productSchema))
+		form: await superValidate(zod4(productSchema))
 	};
 };
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate(event, zod(productSchema));
+		const form = await superValidate(event, zod4(productSchema));
 		if (!form.valid) {
 			return fail(400, { form });
 		}

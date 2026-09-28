@@ -15,6 +15,13 @@
       "when": 1790463638344,
       "tag": "0001_nosy_leper_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790467943292,
+      "tag": "0002_red_pete_wisdom",
+      "breakpoints": true
     }
   ]
 }

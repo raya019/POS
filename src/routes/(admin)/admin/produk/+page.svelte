@@ -1,15 +1,38 @@
 <script lang="ts">
 	let { data } = $props();
 	import { buttonVariants } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
 	import * as Table from '$lib/components/ui/table';
 
+	let searchTerm = $state('');
+
+	let filteredProducts = $derived(
+		data.products.filter(
+			(p) =>
+				p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				p.code.toLowerCase().includes(searchTerm.toLowerCase())
+		)
+	);
+
 	const formatRupiah = (val: number) =>
-		new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
+		new Intl.NumberFormat('id-ID', {
+			style: 'currency',
+			currency: 'IDR',
+			maximumFractionDigits: 0
+		}).format(val);
 </script>
 
-<div class="flex items-center justify-between mb-6">
+<div class="mb-6 flex items-center justify-between">
 	<h1 class="text-3xl font-bold tracking-tight">Data Produk</h1>
 	<a href="/admin/produk/tambah" class={buttonVariants()}>Tambah Produk</a>
+</div>
+
+<div class="mb-4">
+	<Input
+		bind:value={searchTerm}
+		placeholder="Cari nama atau kode produk..."
+		class="max-w-sm bg-white"
+	/>
 </div>
 
 <div class="rounded-md border bg-white">
@@ -26,7 +49,7 @@
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
-			{#each data.products as product (product.id)}
+			{#each filteredProducts as product (product.id)}
 				<Table.Row>
 					<Table.Cell class="font-medium">{product.code}</Table.Cell>
 					<Table.Cell>{product.name}</Table.Cell>
@@ -35,7 +58,10 @@
 					<Table.Cell>{formatRupiah(product.buyPrice)}</Table.Cell>
 					<Table.Cell>{formatRupiah(product.sellPrice)}</Table.Cell>
 					<Table.Cell class="text-right">
-						<a href="/admin/produk/{product.id}/edit" class={buttonVariants({ variant: 'outline', size: 'sm' })}>Edit</a>
+						<a
+							href="/admin/produk/{product.id}/edit"
+							class={buttonVariants({ variant: 'outline', size: 'sm' })}>Edit</a
+						>
 					</Table.Cell>
 				</Table.Row>
 			{:else}

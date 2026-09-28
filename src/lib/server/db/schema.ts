@@ -33,6 +33,10 @@ export const account = pgTable("account", {
 	password: text("password"),
 	accessToken: text("access_token"),
 	refreshToken: text("refresh_token"),
+	idToken: text("id_token"),
+	accessTokenExpiresAt: timestamp("access_token_expires_at"),
+	refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+	scope: text("scope"),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -43,6 +47,7 @@ export const verification = pgTable("verification", {
 	value: text("value").notNull(),
 	expiresAt: timestamp("expires_at").notNull(),
 	createdAt: timestamp("created_at").defaultNow(),
+	updatedAt: timestamp("updated_at"),
 });
 
 export const discountTypeEnum = pgEnum("discount_type", ["percent", "nominal"]);

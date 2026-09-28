@@ -2,33 +2,43 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import { productSchema } from '$lib/schemas/product.schema';
 	import { buttonVariants } from '$lib/components/ui/button';
-	
+	import { ArrowLeft } from 'phosphor-svelte';
+
 	import { untrack } from 'svelte';
-	
+
 	let { data } = $props();
-	
-	const form = superForm(untrack(() => data.form), {
-		validators: zodClient(productSchema)
-	});
+
+	const form = superForm(
+		untrack(() => data.form),
+		{
+			validators: zod4Client(productSchema)
+		}
+	);
 	const { form: formData, enhance, message } = form;
 </script>
 
 <div class="mb-6 flex items-center gap-4">
-	<a href="/admin/produk" class={buttonVariants({ variant: 'outline' })}>Kembali</a>
+	<a
+		href="/admin/produk"
+		class={buttonVariants({ variant: 'outline', size: 'icon' })}
+		title="Kembali"
+	>
+		<ArrowLeft class="h-5 w-5" />
+	</a>
 	<h1 class="text-3xl font-bold tracking-tight">Edit Produk: {data.productName}</h1>
 </div>
 
-<div class="max-w-2xl bg-white p-6 rounded-md border shadow-sm">
+<div class="max-w-4xl rounded-md border bg-white p-6 shadow-sm">
 	{#if $message}
-		<div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+		<div class="mb-4 rounded bg-red-100 p-3 text-red-700">
 			{$message}
 		</div>
 	{/if}
-	
-	<form method="POST" use:enhance class="space-y-4">
+
+	<form method="POST" use:enhance class="space-y-6">
 		<Form.Field {form} name="code">
 			<Form.Control>
 				{#snippet children({ props })}
@@ -49,6 +59,16 @@
 			<Form.FieldErrors />
 		</Form.Field>
 
+		<Form.Field {form} name="barcode">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label>Barcode (Opsional)</Form.Label>
+					<Input {...props} bind:value={$formData.barcode} placeholder="Scan barcode di sini..." />
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
+
 		<div class="grid grid-cols-2 gap-4">
 			<Form.Field {form} name="brand">
 				<Form.Control>
@@ -64,7 +84,20 @@
 				<Form.Control>
 					{#snippet children({ props })}
 						<Form.Label>Ukuran (Opsional)</Form.Label>
-						<Input {...props} bind:value={$formData.size} placeholder="L, XL, 100g, dll" />
+						<select
+							{...props}
+							bind:value={$formData.size}
+							class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							<option value="">-- Pilih Ukuran --</option>
+							<option value="xs">XS</option>
+							<option value="S">S</option>
+							<option value="m">M</option>
+							<option value="l">L</option>
+							<option value="xl">XL</option>
+							<option value="xxl">XXL</option>
+							<option value="xxxl">XXXL</option>
+						</select>
 					{/snippet}
 				</Form.Control>
 				<Form.FieldErrors />
@@ -93,16 +126,8 @@
 			</Form.Field>
 		</div>
 
-		<Form.Field {form} name="barcode">
-			<Form.Control>
-				{#snippet children({ props })}
-					<Form.Label>Barcode (Opsional)</Form.Label>
-					<Input {...props} bind:value={$formData.barcode} placeholder="Scan barcode di sini..." />
-				{/snippet}
-			</Form.Control>
-			<Form.FieldErrors />
-		</Form.Field>
-
-		<Form.Button class="w-full mt-6">Update Produk</Form.Button>
+		<div class="mt-6 flex justify-end border-t pt-4">
+			<Form.Button class="w-full px-8 md:w-auto">Simpan Produk</Form.Button>
+		</div>
 	</form>
 </div>
