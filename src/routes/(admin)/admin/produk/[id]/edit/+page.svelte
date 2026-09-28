@@ -1,12 +1,12 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import { Input } from '$lib/components/ui/input';
+	import * as Form from '$lib/components/ui/form/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
-	import { productSchema } from '$lib/schemas/product.schema';
-	import { buttonVariants } from '$lib/components/ui/button';
-	import { ArrowLeft } from 'phosphor-svelte';
-
+	import { productSchema } from '$lib/schemas/product.schema.js';
+	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import { ArrowLeft } from '@lucide/svelte';
+	import { toast } from 'svelte-sonner';
 	import { untrack } from 'svelte';
 
 	let { data } = $props();
@@ -14,10 +14,21 @@
 	const form = superForm(
 		untrack(() => data.form),
 		{
-			validators: zod4Client(productSchema)
+			validators: zod4Client(productSchema),
+			async onSubmit({ cancel }) {
+				const result = await validateForm();
+				if (!result.valid) cancel();
+			},
+			onUpdate: ({ form, result }) => {
+				if (result.type === 'success') {
+					toast.success('Login berhasil');
+				} else {
+					toast.error(form.message);
+				}
+			}
 		}
 	);
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance, validateForm } = form;
 </script>
 
 <div class="mb-6 flex items-center gap-4">
@@ -32,12 +43,6 @@
 </div>
 
 <div class="max-w-4xl rounded-md border bg-white p-6 shadow-sm">
-	{#if $message}
-		<div class="mb-4 rounded bg-red-100 p-3 text-red-700">
-			{$message}
-		</div>
-	{/if}
-
 	<form method="POST" use:enhance class="space-y-6">
 		<Form.Field {form} name="code">
 			<Form.Control>

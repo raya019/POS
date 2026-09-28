@@ -1,8 +1,8 @@
 <script lang="ts">
 	let { data } = $props();
-	import { buttonVariants } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import * as Table from '$lib/components/ui/table';
+	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import * as Table from '$lib/components/ui/table/index.js';
 
 	let searchTerm = $state('');
 

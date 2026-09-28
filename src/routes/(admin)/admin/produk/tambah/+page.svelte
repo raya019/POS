@@ -1,36 +1,48 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import { Input } from '$lib/components/ui/input';
+	import * as Form from '$lib/components/ui/form/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
-	import { productSchema } from '$lib/schemas/product.schema';
-	import { buttonVariants } from '$lib/components/ui/button';
-	import { ArrowLeft } from 'phosphor-svelte';
-	
+	import { productSchema } from '$lib/schemas/product.schema.js';
+	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import { ArrowLeft } from '@lucide/svelte';
+	import { toast } from 'svelte-sonner';
 	import { untrack } from 'svelte';
-	
+
 	let { data } = $props();
-	
-	const form = superForm(untrack(() => data.form), {
-		validators: zod4Client(productSchema)
-	});
-	const { form: formData, enhance, message } = form;
+
+	const form = superForm(
+		untrack(() => data.form),
+		{
+			validators: zod4Client(productSchema),
+			async onSubmit({ cancel }) {
+				const result = await validateForm();
+				if (!result.valid) cancel();
+			},
+			onUpdate: ({ form, result }) => {
+				if (result.type === 'success') {
+					toast.success('Login berhasil');
+				} else {
+					toast.error(form.message);
+				}
+			}
+		}
+	);
+	const { form: formData, enhance, validateForm } = form;
 </script>
 
 <div class="mb-6 flex items-center gap-4">
-	<a href="/admin/produk" class={buttonVariants({ variant: 'outline', size: 'icon' })} title="Kembali">
+	<a
+		href="/admin/produk"
+		class={buttonVariants({ variant: 'outline', size: 'icon' })}
+		title="Kembali"
+	>
 		<ArrowLeft class="h-5 w-5" />
 	</a>
 	<h1 class="text-3xl font-bold tracking-tight">Tambah Produk</h1>
 </div>
 
-<div class="max-w-4xl bg-white p-6 rounded-md border shadow-sm">
-	{#if $message}
-		<div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-			{$message}
-		</div>
-	{/if}
-	
+<div class="max-w-4xl rounded-md border bg-white p-6 shadow-sm">
 	<form method="POST" use:enhance class="space-y-6">
 		<Form.Field {form} name="code">
 			<Form.Control>
@@ -80,7 +92,7 @@
 						<select
 							{...props}
 							bind:value={$formData.size}
-							class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+							class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 						>
 							<option value="">-- Pilih Ukuran --</option>
 							<option value="xs">XS</option>
@@ -119,8 +131,8 @@
 			</Form.Field>
 		</div>
 
-		<div class="flex justify-end pt-4 border-t mt-6">
-			<Form.Button class="w-full md:w-auto px-8">Simpan Produk</Form.Button>
+		<div class="mt-6 flex justify-end border-t pt-4">
+			<Form.Button class="w-full px-8 md:w-auto">Simpan Produk</Form.Button>
 		</div>
 	</form>
 </div>
