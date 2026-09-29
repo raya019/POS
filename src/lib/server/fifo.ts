@@ -1,6 +1,6 @@
-import { db } from "$lib/server/db";
-import { stockEntries, saleAllocations } from "$lib/server/db/schema";
-import { eq, and, gt, asc } from "drizzle-orm";
+import { db } from '$lib/server/db';
+import { stockEntries, saleAllocations } from '$lib/server/db/schema';
+import { eq, and, gt, asc } from 'drizzle-orm';
 
 /**
  * Pure function untuk menghitung alokasi FIFO secara fungsional.
@@ -33,7 +33,7 @@ export function calculateFifoAllocations(
 	}
 
 	if (remaining > 0) {
-		throw new Error("Stok tidak mencukupi untuk produk ini");
+		throw new Error('Stok tidak mencukupi untuk produk ini');
 	}
 
 	return { updates, allocations };
@@ -43,7 +43,7 @@ export function calculateFifoAllocations(
  * Fungsi utama untuk dialokasikan bersama transaksi kasir.
  */
 export async function allocateStockFifo(
-	tx: any, // Parameter tx disesuaikan saat checkout dengan Drizzle transaction instance
+	tx: any,
 	productId: number,
 	saleId: number,
 	quantityNeeded: number

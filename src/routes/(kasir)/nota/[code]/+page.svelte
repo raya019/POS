@@ -23,7 +23,7 @@
 	<div class="font-bold text-lg">Pratinjau Nota ({data.transactionCode})</div>
 	<div class="space-x-2">
 		<a href="/" class={buttonVariants({ variant: 'outline' })}>Ke Kasir Baru</a>
-		<a href="/riwayat-transaksi" class={buttonVariants({ variant: 'outline' })}>Riwayat Transaksi</a>
+		<a href="/transaksi/riwayat" class={buttonVariants({ variant: 'outline' })}>Riwayat Transaksi</a>
 		<button class={buttonVariants()} onclick={() => window.print()}>Cetak Ulang Nota</button>
 	</div>
 </div>
@@ -45,22 +45,24 @@
 	<div class="border-b border-dashed border-gray-400 mb-2"></div>
 	
 	<table class="w-full mb-3 text-xs">
-		{#each data.items as item}
-			<tr>
-				<td colspan="3" class="pb-1 font-bold">{item.productName}</td>
-			</tr>
-			<tr>
-				<td class="w-1/4 align-top">{item.qty} x</td>
-				<td class="w-1/2 align-top text-right pr-2">{formatRupiah(item.unitPrice)}</td>
-				<td class="w-1/4 align-top text-right">{formatRupiah(item.qty * item.unitPrice)}</td>
-			</tr>
-			{#if item.discount && item.discount > 0}
-			<tr>
-				<td colspan="2" class="text-right pr-2 italic">Diskon</td>
-				<td class="text-right italic">-{formatRupiah(item.discount)}</td>
-			</tr>
-			{/if}
-		{/each}
+		<tbody>
+			{#each data.items as item}
+				<tr>
+					<td colspan="3" class="pb-1 font-bold">{item.productName}</td>
+				</tr>
+				<tr>
+					<td class="w-1/4 align-top">{item.qty} x</td>
+					<td class="w-1/2 align-top text-right pr-2">{formatRupiah(item.unitPrice)}</td>
+					<td class="w-1/4 align-top text-right">{formatRupiah(item.qty * item.unitPrice)}</td>
+				</tr>
+				{#if item.discount && item.discount > 0}
+				<tr>
+					<td colspan="2" class="text-right pr-2 italic">Diskon</td>
+					<td class="text-right italic">-{formatRupiah(item.discount)}</td>
+				</tr>
+				{/if}
+			{/each}
+		</tbody>
 	</table>
 
 	<div class="border-b border-dashed border-gray-400 mb-2"></div>

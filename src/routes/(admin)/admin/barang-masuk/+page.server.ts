@@ -5,10 +5,16 @@ import { stockEntrySchema } from '$lib/schemas/stock.schema';
 import { db } from '$lib/server/db';
 import { products, stockEntries } from '$lib/server/db/schema';
 import type { PageServerLoad, Actions } from './$types';
-import { desc } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 
 export const load: PageServerLoad = async () => {
-	const allProducts = await db.select().from(products).orderBy(desc(products.id));
+	const allProducts = await db.execute(sql`
+		SELECT p.*, COALESCE(SUM(se.quantity_remaining), 0) as total_stock
+		FROM products p
+		LEFT JOIN stock_entries se ON p.id = se.product_id
+		GROUP BY p.id
+		ORDER BY p.id DESC
+	`);
 	return {
 		form: await superValidate(zod4(stockEntrySchema)),
 		products: allProducts

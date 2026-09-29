@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Button } from '$lib/components/ui/button/index.js';
+
 	let { children } = $props();
 </script>
 
@@ -25,7 +27,13 @@
 			>
 			<a
 				href="/admin/transaksi/riwayat"
-				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100">Riwayat Transaksi</a
+				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100"
+				>Riwayat Transaksi</a
+			>
+			<a
+				href="/admin/laporan"
+				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100"
+				>Laporan Penjualan</a
 			>
 			<a
 				href="/admin/kasir"
@@ -40,12 +48,9 @@
 		</nav>
 		<div class="space-y-2 border-t p-4">
 			<form action="/logout" method="POST">
-				<button
-					type="submit"
-					class="w-full rounded-md bg-red-50 p-2 text-center text-sm text-red-600 transition-colors hover:bg-red-100"
-				>
+				<Button type="submit" class="w-full rounded-md bg-red-50  text-red-600  hover:bg-red-100">
 					Logout
-				</button>
+				</Button>
 			</form>
 		</div>
 	</aside>

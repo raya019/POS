@@ -19,6 +19,19 @@
 	<p class="text-gray-500">Daftar seluruh struk transaksi yang berhasil diproses.</p>
 </div>
 
+<!-- Form Filter Rentang Waktu -->
+<form method="GET" class="mb-6 flex items-end gap-4 bg-white p-4 rounded-md shadow-sm border max-w-2xl">
+	<div class="space-y-1.5 w-full">
+		<label class="text-sm font-medium">Dari Tanggal</label>
+		<input type="date" name="from" value={data.from} class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+	</div>
+	<div class="space-y-1.5 w-full">
+		<label class="text-sm font-medium">Sampai Tanggal</label>
+		<input type="date" name="to" value={data.to} class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+	</div>
+	<button type="submit" class={buttonVariants({ variant: 'default' })}>Filter</button>
+</form>
+
 <div class="rounded-md border bg-white shadow-sm">
 	<Table.Root>
 		<Table.Header>
@@ -40,7 +53,7 @@
 					<Table.Cell class="text-right">{trx.total_items}</Table.Cell>
 					<Table.Cell class="text-right font-bold text-blue-700">{formatRupiah(trx.total_amount)}</Table.Cell>
 					<Table.Cell class="text-right">
-						<a href="/nota/{trx.transaction_code}" class={buttonVariants({ variant: 'outline', size: 'sm' })}>Buka Nota</a>
+						<a href="/admin/nota/{trx.transaction_code}" class={buttonVariants({ variant: 'outline', size: 'sm' })}>Buka Nota</a>
 					</Table.Cell>
 				</Table.Row>
 			{:else}

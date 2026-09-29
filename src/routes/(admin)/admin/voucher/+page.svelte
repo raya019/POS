@@ -20,8 +20,6 @@
 
 	const checkStatus = (validFrom: string | null, validUntil: string | null) => {
 		const now = new Date();
-		// Set jam ke 00:00:00 untuk komparasi tanggal
-		now.setHours(0, 0, 0, 0);
 
 		if (validFrom && new Date(validFrom) > now) return 'Belum Berlaku';
 		if (validUntil && new Date(validUntil) < now) return 'Kedaluwarsa';
@@ -81,19 +79,25 @@
 								Edit
 							</a>
 							<AlertDialog.Root>
-								<AlertDialog.Trigger class={buttonVariants({ variant: 'destructive', size: 'sm' })}>Hapus</AlertDialog.Trigger>
+								<AlertDialog.Trigger class={buttonVariants({ variant: 'destructive', size: 'sm' })}
+									>Hapus</AlertDialog.Trigger
+								>
 								<AlertDialog.Content>
 									<AlertDialog.Header>
 										<AlertDialog.Title>Hapus Voucher {v.code}?</AlertDialog.Title>
 										<AlertDialog.Description>
-											Tindakan ini tidak dapat dibatalkan. Voucher ini akan dihapus secara permanen dan tidak dapat digunakan lagi.
+											Tindakan ini tidak dapat dibatalkan. Voucher ini akan dihapus secara permanen
+											dan tidak dapat digunakan lagi.
 										</AlertDialog.Description>
 									</AlertDialog.Header>
 									<AlertDialog.Footer>
 										<AlertDialog.Cancel>Batal</AlertDialog.Cancel>
 										<form method="POST" action="?/delete" use:enhance>
 											<input type="hidden" name="id" value={v.id} />
-											<AlertDialog.Action type="submit" class="bg-red-600 hover:bg-red-700 text-white">
+											<AlertDialog.Action
+												type="submit"
+												class="bg-red-600 text-white hover:bg-red-700"
+											>
 												Ya, Hapus
 											</AlertDialog.Action>
 										</form>

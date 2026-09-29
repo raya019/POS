@@ -76,6 +76,7 @@
 				<Table.Head>Kode</Table.Head>
 				<Table.Head>Nama Produk</Table.Head>
 				<Table.Head>Ukuran</Table.Head>
+				<Table.Head class="text-right">Stok Saat Ini</Table.Head>
 				<Table.Head class="text-right">Aksi</Table.Head>
 			</Table.Row>
 		</Table.Header>
@@ -85,13 +86,14 @@
 					<Table.Cell class="font-medium">{product.code}</Table.Cell>
 					<Table.Cell>{product.name}</Table.Cell>
 					<Table.Cell>{product.size || '-'}</Table.Cell>
+					<Table.Cell class="text-right font-semibold">{product.total_stock}</Table.Cell>
 					<Table.Cell class="text-right">
 						<Button size="sm" onclick={() => openModal(product)}>Tambah Stok</Button>
 					</Table.Cell>
 				</Table.Row>
 			{:else}
 				<Table.Row>
-					<Table.Cell colspan={4} class="h-24 text-center">Produk tidak ditemukan.</Table.Cell>
+					<Table.Cell colspan={5} class="h-24 text-center">Produk tidak ditemukan.</Table.Cell>
 				</Table.Row>
 			{/each}
 		</Table.Body>
