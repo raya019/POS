@@ -1,62 +1,14 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { AppSidebar, PageHeader } from '$lib';
 
-	let { children } = $props();
+	let { data, children } = $props();
 </script>
 
 <div class="flex h-screen bg-gray-50 text-gray-900">
-	<!-- Sidebar -->
-	<aside class="flex w-64 flex-col border-r bg-white shadow-sm">
-		<div class="border-b p-6 text-xl font-bold">Ghanimah POS</div>
-		<nav class="flex-1 space-y-2 p-4">
-			<a href="/admin" class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100"
-				>Dashboard</a
-			>
-			<a
-				href="/admin/produk"
-				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100">Data Produk</a
-			>
-			<a
-				href="/admin/barang-masuk"
-				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100"
-				>Stok Barang Masuk</a
-			>
-			<a
-				href="/admin/barang-masuk/riwayat"
-				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100">Riwayat Stok</a
-			>
-			<a
-				href="/admin/transaksi/riwayat"
-				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100"
-				>Riwayat Transaksi</a
-			>
-			<a
-				href="/admin/laporan"
-				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100"
-				>Laporan Penjualan</a
-			>
-			<a
-				href="/admin/kasir"
-				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100"
-				>Manajemen Kasir</a
-			>
-			<a
-				href="/admin/voucher"
-				class="block rounded-md p-3 font-medium transition-colors hover:bg-gray-100"
-				>Kelola Voucher</a
-			>
-		</nav>
-		<div class="space-y-2 border-t p-4">
-			<form action="/logout" method="POST">
-				<Button type="submit" class="w-full rounded-md bg-red-50  text-red-600  hover:bg-red-100">
-					Logout
-				</Button>
-			</form>
-		</div>
-	</aside>
+	<AppSidebar role={data.user.role} />
 
-	<!-- Main Content -->
 	<main class="flex-1 overflow-auto p-8">
+		<PageHeader user={data.user} />
 		{@render children()}
 	</main>
 </div>

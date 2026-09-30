@@ -9,5 +9,5 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	// Secara umum admin juga bisa mengakses kasir jika mau, 
 	// tapi kita bebaskan sementara atau batasi strict sesuai butuh.
 	// Di POS ini, admin bebas mengakses.
-	return {};
+	return { user: locals.user };
 };

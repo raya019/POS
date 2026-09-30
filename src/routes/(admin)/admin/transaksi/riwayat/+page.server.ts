@@ -2,6 +2,13 @@ import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { sql } from 'drizzle-orm';
 
+interface HistoryData {
+	transaction_code: string;
+	sold_at: string;
+	cashier_name: string;
+	total_items: number;
+	total_amount: number;
+}
 export const load: PageServerLoad = async ({ url }) => {
 	const todayStr = new Date().toISOString().split('T')[0];
 	const from = url.searchParams.get('from') || todayStr;
@@ -11,7 +18,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	const toDate = new Date(`${to}T23:59:59.999`).toISOString();
 
 	const historyData = await db.execute(sql`
-		SELECT s.transaction_code, s.sold_at, u.name as cashier_name,
+		SELECT  s.transaction_code, s.sold_at, u.name as cashier_name,
 			   SUM(s.quantity_sold) as total_items, SUM(s.total_paid) as total_amount
 		FROM sales s
 		JOIN "user" u ON s.cashier_id = u.id
@@ -20,5 +27,5 @@ export const load: PageServerLoad = async ({ url }) => {
 		ORDER BY s.sold_at DESC
 	`);
 
-	return { history: historyData, from, to };
+	return { history: historyData as HistoryData[], from, to };
 };

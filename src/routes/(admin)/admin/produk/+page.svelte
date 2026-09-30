@@ -1,9 +1,11 @@
 <script lang="ts">
-	let { data } = $props();
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
+	import { formatRupiah } from '$lib';
 
+	let { data } = $props();
+	
 	let searchTerm = $state('');
 
 	let filteredProducts = $derived(
@@ -13,13 +15,6 @@
 				p.code.toLowerCase().includes(searchTerm.toLowerCase())
 		)
 	);
-
-	const formatRupiah = (val: number) =>
-		new Intl.NumberFormat('id-ID', {
-			style: 'currency',
-			currency: 'IDR',
-			maximumFractionDigits: 0
-		}).format(val);
 </script>
 
 <div class="mb-6 flex items-center justify-between">

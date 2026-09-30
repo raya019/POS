@@ -8,5 +8,5 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	if (locals.user.role !== 'admin_owner') {
 		throw redirect(302, '/transaksi');
 	}
-	return {};
+	return { user: locals.user };
 };

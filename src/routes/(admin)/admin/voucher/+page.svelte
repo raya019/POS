@@ -1,22 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import * as Table from '$lib/components/ui/table/index.js';
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
+	import { formatDate, formatRupiah } from '$lib';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import * as Table from '$lib/components/ui/table/index.js';
 
 	let { data } = $props();
-
-	const formatRupiah = (val: number) =>
-		new Intl.NumberFormat('id-ID', {
-			style: 'currency',
-			currency: 'IDR',
-			maximumFractionDigits: 0
-		}).format(val);
-
-	const formatDate = (dateString: string | null) => {
-		if (!dateString) return '-';
-		return new Date(dateString).toLocaleDateString('id-ID');
-	};
 
 	const checkStatus = (validFrom: string | null, validUntil: string | null) => {
 		const now = new Date();

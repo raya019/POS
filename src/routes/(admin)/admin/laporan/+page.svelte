@@ -4,15 +4,9 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
+	import { formatRupiah } from '$lib';
 
 	let { data } = $props();
-
-	const formatRupiah = (val: number) =>
-		new Intl.NumberFormat('id-ID', {
-			style: 'currency',
-			currency: 'IDR',
-			maximumFractionDigits: 0
-		}).format(val);
 </script>
 
 <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -100,7 +94,7 @@
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
-			{#each data.salesData as sale}
+			{#each data.salesData as sale (sale.transactionCode)}
 				<Table.Row>
 					<Table.Cell>{sale.date}</Table.Cell>
 					<Table.Cell class="font-medium">{sale.transactionCode}</Table.Cell>

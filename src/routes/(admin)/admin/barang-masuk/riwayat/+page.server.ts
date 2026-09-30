@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
-import { db } from '$lib/server/db';
-import { stockEntries, products, user } from '$lib/server/db/schema';
+import { db } from '$lib/server/db/index.js';
+import { stockEntries, products, user } from '$lib/server/db/schema.js';
 import { desc, eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async () => {

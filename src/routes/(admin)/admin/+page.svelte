@@ -1,46 +1,17 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-	let { data } = $props();
+	import { StatCard, formatRupiah } from '$lib';
 
-	// Format Rupiah helper
-	const formatRupiah = (val: number) =>
-		new Intl.NumberFormat('id-ID', {
-			style: 'currency',
-			currency: 'IDR',
-			maximumFractionDigits: 0
-		}).format(val);
+	let { data } = $props();
 </script>
 
 <div class="space-y-6">
 	<h1 class="text-3xl font-bold tracking-tight">Dashboard Admin</h1>
 
 	<div class="grid gap-4 md:grid-cols-3">
-		<Card.Root>
-			<Card.Header class="pb-2">
-				<Card.Title class="text-sm font-medium text-gray-500">Penjualan Hari Ini</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				<div class="text-2xl font-bold">{formatRupiah(data.salesToday)}</div>
-			</Card.Content>
-		</Card.Root>
-
-		<Card.Root>
-			<Card.Header class="pb-2">
-				<Card.Title class="text-sm font-medium text-gray-500">Transaksi Bulan Ini</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				<div class="text-2xl font-bold">{data.transactionsThisMonth}</div>
-			</Card.Content>
-		</Card.Root>
-
-		<Card.Root>
-			<Card.Header class="pb-2">
-				<Card.Title class="text-sm font-medium text-gray-500">Voucher Aktif</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				<div class="text-2xl font-bold">{data.activeVouchers}</div>
-			</Card.Content>
-		</Card.Root>
+		<StatCard title="Penjualan Hari Ini" value={formatRupiah(data.salesToday)} />
+		<StatCard title="Transaksi Bulan Ini" value={data.transactionsThisMonth} />
+		<StatCard title="Voucher Aktif" value={data.activeVouchers} />
 	</div>
 
 	<!-- Tabel Stok Kritis -->
@@ -70,7 +41,7 @@
 							</tr>
 						</thead>
 						<tbody class="[&_tr:last-child]:border-0">
-							{#each data.criticalStocks as stock}
+							{#each data.criticalStocks as stock (stock.code)}
 								<tr
 									class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
 								>

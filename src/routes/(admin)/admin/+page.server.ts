@@ -2,6 +2,12 @@ import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { sql } from 'drizzle-orm';
 
+interface CriticalStock {
+	name: string;
+	code: string;
+	total_qty: number;
+}
+
 export const load: PageServerLoad = async () => {
 	const today = new Date();
 	today.setHours(0, 0, 0, 0);
@@ -14,7 +20,7 @@ export const load: PageServerLoad = async () => {
 		FROM sales 
 		WHERE sold_at >= ${today.toISOString()}
 	`);
-	
+
 	// Transaksi bulan ini (count distinct)
 	const transactionsMonthResult = await db.execute(sql`
 		SELECT COUNT(DISTINCT transaction_code) as count
@@ -42,6 +48,6 @@ export const load: PageServerLoad = async () => {
 		salesToday: Number(salesTodayResult[0]?.total || 0),
 		transactionsThisMonth: Number(transactionsMonthResult[0]?.count || 0),
 		activeVouchers: Number(activeVouchersResult[0]?.count || 0),
-		criticalStocks: criticalStocks as { name: string; code: string; total_qty: number }[]
+		criticalStocks: criticalStocks as CriticalStock[]
 	};
 };

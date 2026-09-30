@@ -1,11 +1,11 @@
-import { fail, redirect } from '@sveltejs/kit';
-import { superValidate, message } from 'sveltekit-superforms';
-import { zod4 } from 'sveltekit-superforms/adapters';
 import { stockEntrySchema } from '$lib/schemas/stock.schema';
 import { db } from '$lib/server/db';
-import { products, stockEntries } from '$lib/server/db/schema';
-import type { PageServerLoad, Actions } from './$types';
-import { desc, sql } from 'drizzle-orm';
+import { stockEntries } from '$lib/server/db/schema';
+import { fail } from '@sveltejs/kit';
+import { sql } from 'drizzle-orm';
+import { message, superValidate } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const allProducts = await db.execute(sql`
@@ -37,7 +37,7 @@ export const actions: Actions = {
 				createdBy: event.locals.user.id
 			});
 		} catch (error: any) {
-			return message(form, 'Internal Server Error.', { status: 500 });
+			throw fail(500, { form, message: 'Gagal mencatat barang masuk.' });
 		}
 
 		return message(form, 'Stok berhasil ditambahkan!');

@@ -6,6 +6,7 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { toast } from 'svelte-sonner';
+	import { formatRupiah } from '$lib';
 
 	let { data, form } = $props();
 
@@ -23,13 +24,6 @@
 			toast.error(form.error);
 		}
 	});
-
-	const formatRupiah = (val: number) =>
-		new Intl.NumberFormat('id-ID', {
-			style: 'currency',
-			currency: 'IDR',
-			maximumFractionDigits: 0
-		}).format(val);
 
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key !== 'Enter') return;
