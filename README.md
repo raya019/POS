@@ -1,65 +1,89 @@
-# Svelte library
+# 🛍️ Ghanimah POS
 
-Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.com/package/sv).
+Aplikasi *Point of Sales* (POS) moderen dan pintar yang dirancang khusus untuk toko busana muslimah. Proyek ini dibangun dengan fokus pada performa yang cepat, akurasi akuntansi (algoritma FIFO untuk stok), dan kemudahan penggunaan kasir.
 
-Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
+## 🚀 Teknologi yang Digunakan
 
-## Creating a project
+- **Framework:** [SvelteKit 2](https://svelte.dev/)
+- **Runtime & Package Manager:** [Bun](https://bun.sh/)
+- **Database:** PostgreSQL
+- **ORM:** [Drizzle ORM](https://orm.drizzle.team/)
+- **Autentikasi:** [Better Auth](https://better-auth.com/)
+- **Styling & UI:** Tailwind CSS & [Shadcn-Svelte](https://www.shadcn-svelte.com/)
 
-If you're seeing this, you've probably already done this step. Congrats!
+## ✨ Fitur Utama
 
-```sh
-# create a new project in the current directory
-npx sv create
+- **Multi-Role Authentication:** Pemisahan hak akses antara **Admin (Pemilik)** dan **Kasir**.
+- **Transaksi Cepat (POS):** Layar kasir responsif yang mendukung pemindai *barcode* (*barcode scanner friendly*).
+- **Akuntansi FIFO (First-In, First-Out):** Mengelola harga pokok penjualan (HPP) secara akurat dengan selalu mengalokasikan / memotong stok dari barang yang paling lama masuk terlebih dahulu.
+- **Manajemen Voucher Cerdas:** Pembuatan diskon nominal atau persentase, dengan opsi pembatasan minimal belanja dan limitasi pada produk/merek tertentu.
+- **Cetak Nota & Laporan PDF:** Pembuatan otomatis struk (nota) transaksi cetak serta ekspor Laporan Pendapatan berkala ke dalam format PDF.
 
-# create a new project in my-app
-npx sv create my-app
+---
+
+## 💻 Panduan Instalasi (Development)
+
+### 1. Prasyarat (*Prerequisites*)
+Pastikan Anda sudah menginstal **PostgreSQL** dan service database-nya sudah berjalan.
+Selain itu, proyek ini mutlak membutuhkan **Bun**. Cara menginstalnya:
+- **Pengguna Windows (PowerShell):**
+  ```powershell
+  powershell -c "irm bun.sh/install.ps1 | iex"
+  ```
+- **Pengguna macOS / Linux (Terminal):**
+  ```bash
+  curl -fsSL https://bun.sh/install | bash
+  ```
+
+### 2. Kloning Proyek & Instalasi Dependensi
+Buka terminal Anda, lalu jalankan:
+```bash
+git clone <url-repository-anda>
+cd POS
+bun install
 ```
 
-To recreate this project with the same configuration:
+### 3. Konfigurasi Lingkungan (Environment)
+Buat file bernama `.env` di folder utama proyek (root), dan isikan variabel berikut menyesuaikan dengan kredensial PostgreSQL Anda:
+```env
+# Contoh koneksi PostgreSQL lokal
+DATABASE_URL="postgresql://postgres:password_postgres_anda@localhost:5432/ghanimah_pos"
 
-```sh
-# recreate this project
-bun x sv@0.17.1 create --template library --types ts --add prettier eslint tailwindcss="plugins:none" drizzle="database:postgresql+postgresql:postgres.js+docker:no" better-auth="demo:password" --install bun .
+# Secret untuk session & JWT (Ketik acak)
+BETTER_AUTH_SECRET="rahasia_super_aman_123"
+
+# URL base aplikasi (Diperlukan oleh Better Auth)
+ORIGIN="http://localhost:5173"
+```
+*(Catatan: Pastikan Anda telah membuat database kosong bernama `ghanimah_pos` di PostgreSQL Anda terlebih dahulu).*
+
+### 4. Migrasi Database & Seeding
+Sinkronkan skema database Drizzle ke PostgreSQL dan masukkan (*seed*) data awal untuk presentasi/uji coba:
+```bash
+# Melakukan push skema tabel ke database
+bun run db:push
+
+# Mengisi database dengan akun admin, dummy data produk, dan demo Voucher FIFO
+bun run seed
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+### 5. Menjalankan Aplikasi
+Mulai *server development*:
+```bash
+bun run dev
 ```
+Buka browser Anda dan akses **`http://localhost:5173`**.
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+---
 
-## Building
+## 🔐 Akun Default (Hasil Seeding)
+Jika Anda telah menjalankan script seed di atas, sistem telah membuatkan satu akun Admin awal:
+- **Username:** `admin`
+- **Password:** `password123`
 
-To build your library:
+Dari *Dashboard Admin*, Anda bisa langsung menuju **Manajemen Kasir** untuk menambahkan akun karyawan Anda.
 
-```sh
-npm pack
-```
+---
 
-To create a production version of your showcase app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```sh
-npm publish
-```
+### 📝 Catatan untuk Presentasi Mata Kuliah
+Jika Anda mendemokan *Algoritma FIFO*, Anda dapat langsung melihat riwayat **Sisa Stok** pada halaman Riwayat Stok di tab Admin setelah melakukan checkout suatu produk pada tab Kasir. Sistem didesain untuk tidak menghapus (`DELETE`) tabel barang masuk, melainkan membuat nilai sisa stok menjadi `0` untuk menjaga jejak audit (*audit trail*).
