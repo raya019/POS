@@ -120,7 +120,7 @@
 
 <div class="grid h-[calc(100vh-100px)] grid-cols-1 gap-6 md:grid-cols-3">
 	<!-- Bagian Kiri: Produk & Pencarian -->
-	<div class="flex flex-col gap-4 md:col-span-2">
+	<div class="flex h-full flex-col gap-4 md:col-span-2 overflow-hidden">
 		<div class="flex items-center gap-2">
 			<Input
 				type="text"
@@ -132,7 +132,7 @@
 			/>
 		</div>
 
-		<div class="grid grid-cols-2 gap-4 overflow-auto pb-4 lg:grid-cols-3">
+		<div class="grid flex-1 grid-cols-2 gap-4 overflow-y-auto pb-4 lg:grid-cols-3 pr-2">
 			{#each filteredProducts as product (product.id)}
 				<button class="text-left focus:outline-none" onclick={() => addToCart(product)}>
 					<Card.Root class="h-full cursor-pointer transition-colors hover:border-blue-500">

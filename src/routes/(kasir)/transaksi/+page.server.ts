@@ -26,14 +26,13 @@ export const load: PageServerLoad = async () => {
 	`);
 
 	// Ambil voucher yang masih aktif
-	const today = new Date().toISOString().split('T')[0];
 	const activeVouchersResult = await db
 		.select()
 		.from(vouchers)
 		.where(
 			and(
-				or(isNull(vouchers.validFrom), lte(vouchers.validFrom, today)),
-				or(isNull(vouchers.validUntil), gte(vouchers.validUntil, today))
+				or(isNull(vouchers.validFrom), sql`${vouchers.validFrom} <= CURRENT_DATE`),
+				or(isNull(vouchers.validUntil), sql`${vouchers.validUntil} >= CURRENT_DATE`)
 			)
 		);
 
