@@ -25,13 +25,13 @@ export const load: PageServerLoad = async ({ params }) => {
 	}
 
 	const cashierName = salesData[0].cashier.name;
-	const transactionDate = salesData[0].sale.soldAt;
+	const transactionDate = new Date(salesData[0].sale.soldAt).toLocaleDateString('en-CA');
 	const voucherUsed = salesData[0].voucher?.code;
 
 	let totalSubtotal = 0;
 	let totalDiscount = 0;
 
-	const items = salesData.map(row => {
+	const items = salesData.map((row) => {
 		const subtotal = row.sale.unitPrice * row.sale.quantitySold;
 		totalSubtotal += subtotal;
 		totalDiscount += row.sale.discountAmount || 0;

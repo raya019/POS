@@ -85,7 +85,7 @@ export const actions: Actions = {
 		}
 
 		// Generate Transaction Code
-		const transactionCode = `TRX-${new Date().toISOString().slice(0, 10)}-${crypto.randomUUID().slice(0, 6)}`;
+		const transactionCode = `TRX-${new Date().toLocaleDateString('en-CA')}-${crypto.randomUUID().slice(0, 6)}`;
 
 		try {
 			await db.transaction(async (tx) => {

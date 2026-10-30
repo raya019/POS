@@ -26,7 +26,9 @@
 			</a>
 		{:else}
 			<a href="/" class={buttonVariants({ variant: 'outline' })}>Ke Kasir Baru</a>
-			<a href="/transaksi/riwayat" class={buttonVariants({ variant: 'outline' })}>Riwayat Transaksi</a>
+			<a href="/transaksi/riwayat" class={buttonVariants({ variant: 'outline' })}
+				>Riwayat Transaksi</a
+			>
 		{/if}
 		<button class={buttonVariants()} onclick={() => window.print()}>Cetak Ulang Nota</button>
 	</div>
@@ -49,26 +51,26 @@
 		</div>
 		<div class="flex justify-between">
 			<span>Tgl:</span>
-			<span>{formatDate(data.receiptData.sold_at)}</span>
+			<span>{formatDate(data.transactionDate)}</span>
 		</div>
 		<div class="flex justify-between">
 			<span>Kasir:</span>
-			<span>{data.receiptData.cashier_name}</span>
+			<span>{data.cashierName}</span>
 		</div>
 	</div>
 
 	<div class="mb-2 border-b border-dashed pb-2">
 		<table class="w-full text-xs">
 			<tbody>
-				{#each data.items as item}
+				{#each data.items ?? [] as item (item.id)}
 					<tr>
 						<td class="py-1" colspan="3">
-							<div class="font-bold">{item.product_name}</div>
+							<div class="font-bold">{item.productName}</div>
 						</td>
 					</tr>
 					<tr>
-						<td class="py-1 text-gray-600">{item.quantity} x {formatRupiah(item.unit_price)}</td>
-						<td class="py-1 text-right">{formatRupiah(item.quantity * item.unit_price)}</td>
+						<td class="py-1 text-gray-600">{item.qty} x {formatRupiah(item.unitPrice)}</td>
+						<td class="py-1 text-right">{formatRupiah(item.qty * item.unitPrice)}</td>
 					</tr>
 				{/each}
 			</tbody>
@@ -78,12 +80,12 @@
 	<div class="border-b border-dashed pb-2 text-sm">
 		<div class="flex justify-between font-bold">
 			<span>Total Bayar</span>
-			<span>{formatRupiah(data.receiptData.total_paid)}</span>
+			<span>{formatRupiah(data.grandTotal)}</span>
 		</div>
-		{#if data.receiptData.discount_amount > 0}
+		{#if data.totalDiscount > 0}
 			<div class="mt-1 flex justify-between text-xs text-red-600">
 				<span>Diskon (Voucher)</span>
-				<span>-{formatRupiah(data.receiptData.discount_amount)}</span>
+				<span>-{formatRupiah(data.totalDiscount)}</span>
 			</div>
 		{/if}
 	</div>

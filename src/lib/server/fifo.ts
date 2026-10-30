@@ -1,11 +1,6 @@
-import { db } from '$lib/server/db';
-import { stockEntries, saleAllocations } from '$lib/server/db/schema';
-import { eq, and, gt, asc } from 'drizzle-orm';
+import { saleAllocations, stockEntries } from '$lib/server/db/schema';
+import { and, asc, eq, gt } from 'drizzle-orm';
 
-/**
- * Pure function untuk menghitung alokasi FIFO secara fungsional.
- * Memudahkan proses Unit Testing tanpa mock database kompleks.
- */
 export function calculateFifoAllocations(
 	entries: { id: number; quantityRemaining: number }[],
 	quantityNeeded: number
@@ -39,9 +34,6 @@ export function calculateFifoAllocations(
 	return { updates, allocations };
 }
 
-/**
- * Fungsi utama untuk dialokasikan bersama transaksi kasir.
- */
 export async function allocateStockFifo(
 	tx: any,
 	productId: number,
@@ -52,11 +44,10 @@ export async function allocateStockFifo(
 		.select()
 		.from(stockEntries)
 		.where(and(eq(stockEntries.productId, productId), gt(stockEntries.quantityRemaining, 0)))
-		.orderBy(asc(stockEntries.entryDate), asc(stockEntries.id)); // urutkan berdasar tanggal, lalu ID sebagai pemecah seri
+		.orderBy(asc(stockEntries.entryDate), asc(stockEntries.id));
 
 	const { updates, allocations } = calculateFifoAllocations(entries, quantityNeeded);
 
-	// Terapkan hasil perhitungan ke database
 	for (const update of updates) {
 		await tx
 			.update(stockEntries)

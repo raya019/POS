@@ -48,7 +48,7 @@
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
-			{#each data.history as trx}
+			{#each data.history as trx (trx.transaction_code)}
 				<Table.Row>
 					<Table.Cell>{formatDate(trx.sold_at)}</Table.Cell>
 					<Table.Cell class="font-medium">{trx.transaction_code}</Table.Cell>

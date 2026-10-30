@@ -54,7 +54,11 @@
 					<Table.Cell>
 						<span
 							class="rounded-full px-2 py-1 text-xs font-semibold
-							{status === 'Berlaku' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}"
+							{status === 'Berlaku'
+								? 'bg-green-100 text-green-700'
+								: status === 'Belum Berlaku'
+									? 'bg-amber-100 text-amber-700'
+									: 'bg-red-100 text-red-700'}"
 						>
 							{status}
 						</span>

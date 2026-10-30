@@ -51,12 +51,15 @@
 	}
 
 	function updateQty(index: number, newQty: number) {
+		const item = cart[index];
+		if (!item) return;
+
 		if (newQty < 1) {
 			cart.splice(index, 1);
-		} else if (newQty > cart[index].product.total_stock) {
-			toast.error(`Stok tidak cukup! (Maks: ${cart[index].product.total_stock})`);
+		} else if (newQty > item.product.total_stock) {
+			toast.error(`Stok tidak cukup! (Maks: ${item.product.total_stock})`);
 		} else {
-			cart[index].qty = newQty;
+			item.qty = newQty;
 		}
 	}
 

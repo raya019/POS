@@ -258,35 +258,40 @@ async function main() {
 		await db.insert(schema.stockEntries).values(stockEntriesData);
 
 		console.log('Menyiapkan simulasi Voucher...');
-		const futureDate = new Date();
-		futureDate.setDate(futureDate.getDate() + 30); // Berakhir 30 hari dari sekarang
-		const futureDateStr = futureDate.toISOString().split('T')[0];
 
-		// 1. Voucher Nominal (Berlaku untuk semua)
+		// Helper menghitung tanggal relatif dari hari ini format YYYY-MM-DD
+		const getRelativeDate = (days: number) => {
+			const d = new Date();
+			d.setDate(d.getDate() + days);
+			return d.toISOString().split('T')[0];
+		};
+
+		// 1. Voucher yang SEDANG BERLAKU
 		const [voucherNominal] = await db.insert(schema.vouchers).values({
 			code: 'HEMAT10K',
 			discountType: 'nominal',
 			discountValue: 10000,
 			minPurchase: 50000,
-			validUntil: futureDateStr
+			validFrom: getRelativeDate(-7),   // Aktif sejak 7 hari lalu
+			validUntil: getRelativeDate(30)   // Berakhir 30 hari ke depan
 		}).returning();
 
-		// 2. Voucher Persentase (Berlaku untuk semua)
 		const [voucherPercent] = await db.insert(schema.vouchers).values({
 			code: 'DISKON20',
 			discountType: 'percent',
 			discountValue: 20,
 			minPurchase: 100000,
-			validUntil: futureDateStr
+			validFrom: null,                  // Tanpa batas mulai (langsung aktif)
+			validUntil: getRelativeDate(14)   // Berakhir 14 hari ke depan
 		}).returning();
 
-		// 3. Voucher Khusus Produk Tertentu
 		const [voucherSpesifik] = await db.insert(schema.vouchers).values({
 			code: 'PROMORAB',
 			discountType: 'nominal',
 			discountValue: 50000,
 			minPurchase: 150000,
-			validUntil: futureDateStr
+			validFrom: getRelativeDate(-3),
+			validUntil: getRelativeDate(30)
 		}).returning();
 
 		// Mengaitkan Voucher 'PROMORAB' khusus ke 2 produk pertama dari Merek Rabbani
@@ -299,7 +304,47 @@ async function main() {
 			await db.insert(schema.voucherProducts).values(vpData);
 		}
 
-		console.log('? Seed Toko Baju Muslimah Siap (Termasuk Data Voucher)!');
+		// 2. Voucher yang SUDAH KADALUWARSA
+		await db.insert(schema.vouchers).values([
+			{
+				code: 'EXPIRED50',
+				discountType: 'nominal',
+				discountValue: 50000,
+				minPurchase: 100000,
+				validFrom: getRelativeDate(-30), // 30 hari lalu
+				validUntil: getRelativeDate(-5)  // Sudah berakhir 5 hari lalu
+			},
+			{
+				code: 'FLASHPAST',
+				discountType: 'percent',
+				discountValue: 15,
+				minPurchase: 0,
+				validFrom: null,                 // Tanpa validFrom, hanya validUntil lewat
+				validUntil: getRelativeDate(-1)  // Berakhir kemarin
+			}
+		]);
+
+		// 3. Voucher yang BELUM BERLAKU
+		await db.insert(schema.vouchers).values([
+			{
+				code: 'PROMONEXT',
+				discountType: 'percent',
+				discountValue: 25,
+				minPurchase: 150000,
+				validFrom: getRelativeDate(7),   // Baru aktif 7 hari ke depan
+				validUntil: getRelativeDate(14)
+			},
+			{
+				code: 'COMINGSOON',
+				discountType: 'nominal',
+				discountValue: 20000,
+				minPurchase: 80000,
+				validFrom: getRelativeDate(3),   // Baru aktif 3 hari ke depan
+				validUntil: getRelativeDate(20)
+			}
+		]);
+
+		console.log('✅ Seed Toko Baju Muslimah Siap (Termasuk Data Voucher Lengkap)!');
 		console.log('--------------------------------------------------');
 		console.log("Barang Bintang Demo: Gamis Syar'i Khadijah (RAB-001)");
 		console.log('Total Stok: 45 pcs');
