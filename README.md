@@ -96,9 +96,3 @@ Jika Anda telah menjalankan script seed di atas, sistem telah membuatkan satu ak
 - **Password:** `password123`
 
 Dari _Dashboard Admin_, Anda bisa langsung menuju **Manajemen Kasir** untuk menambahkan akun karyawan Anda.
-
----
-
-### 📝 Catatan untuk Presentasi Mata Kuliah
-
-Jika Anda mendemokan _Algoritma FIFO_, Anda dapat langsung melihat riwayat **Sisa Stok** pada halaman Riwayat Stok di tab Admin setelah melakukan checkout suatu produk pada tab Kasir. Sistem didesain untuk tidak menghapus (`DELETE`) tabel barang masuk, melainkan membuat nilai sisa stok menjadi `0` untuk menjaga jejak audit (_audit trail_).
