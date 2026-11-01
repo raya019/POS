@@ -36,7 +36,7 @@ export const actions: Actions = {
 			await db.update(products).set(form.data).where(eq(products.id, id));
 		} catch (err: any) {
 			if (err.message && err.message.toLowerCase().includes('unique')) {
-				return fail(400, { form, message: 'Kode atau Barcode sudah digunakan oleh produk lain.' });
+				return fail(400, { form, message: 'Kode produk sudah digunakan oleh produk lain.' });
 			}
 			return fail(500, { form, message: 'Terjadi kesalahan sistem.' });
 		}

@@ -29,8 +29,10 @@
 		if (e.key !== 'Enter') return;
 		e.preventDefault();
 
-		// Cari exact match barcode (kasus scanner)
-		const match = data.products.find((p) => p.barcode === searchValue);
+		// Cari exact match kode produk / barcode (kasus scanner)
+		const query = searchValue.trim().toLowerCase();
+		if (!query) return;
+		const match = data.products.find((p) => p.code.toLowerCase() === query);
 		if (match) {
 			addToCart(match);
 			searchValue = '';

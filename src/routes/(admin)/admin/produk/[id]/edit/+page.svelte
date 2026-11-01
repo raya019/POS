@@ -48,7 +48,11 @@
 			<Form.Control>
 				{#snippet children({ props })}
 					<Form.Label>Kode Produk</Form.Label>
-					<Input {...props} bind:value={$formData.code} placeholder="Misal: BRG001" />
+					<Input
+						{...props}
+						bind:value={$formData.code}
+						placeholder="Scan barcode produk atau ketik kode (Misal: RAB-001)"
+					/>
 				{/snippet}
 			</Form.Control>
 			<Form.FieldErrors />
@@ -59,16 +63,6 @@
 				{#snippet children({ props })}
 					<Form.Label>Nama Produk</Form.Label>
 					<Input {...props} bind:value={$formData.name} />
-				{/snippet}
-			</Form.Control>
-			<Form.FieldErrors />
-		</Form.Field>
-
-		<Form.Field {form} name="barcode">
-			<Form.Control>
-				{#snippet children({ props })}
-					<Form.Label>Barcode (Opsional)</Form.Label>
-					<Input {...props} bind:value={$formData.barcode} placeholder="Scan barcode di sini..." />
 				{/snippet}
 			</Form.Control>
 			<Form.FieldErrors />

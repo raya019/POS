@@ -76,7 +76,7 @@ export const products = pgTable('products', {
 	size: varchar('size', { length: 10 }),
 	buyPrice: integer('buy_price').notNull(),
 	sellPrice: integer('sell_price').notNull(),
-	barcode: varchar('barcode', { length: 50 }).unique()
+
 });
 
 export const stockEntries = pgTable('stock_entries', {

@@ -23,7 +23,7 @@ export const actions: Actions = {
 			await db.insert(products).values(form.data);
 		} catch (error: any) {
 			if (error.message && error.message.toLowerCase().includes('unique')) {
-				return fail(400, { form, message: 'Kode atau Barcode sudah terdaftar.' });
+				return fail(400, { form, message: 'Kode produk sudah terdaftar.' });
 			}
 			return fail(500, { form, message: 'Terjadi kesalahan sistem.' });
 		}

@@ -6,8 +6,7 @@ export const productSchema = z.object({
 	brand: z.string().max(50).optional(),
 	size: z.string().max(10).optional(),
 	buyPrice: z.number().int().positive('Harga beli harus > 0'),
-	sellPrice: z.number().int().positive('Harga jual harus > 0'),
-	barcode: z.string().max(50).optional().nullable()
+	sellPrice: z.number().int().positive('Harga jual harus > 0')
 });
 
 export type ProductSchema = z.infer<typeof productSchema>;
