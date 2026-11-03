@@ -130,7 +130,7 @@
 				</div>
 			</div>
 
-			<form method="POST" action="{postUrl}?/create" use:enhance class="space-y-4">
+			<form method="POST" action={postUrl} use:enhance class="space-y-4">
 				<input type="hidden" name="productId" bind:value={$formData.productId} />
 
 				<Form.Field form={formObj} name="quantityIn">

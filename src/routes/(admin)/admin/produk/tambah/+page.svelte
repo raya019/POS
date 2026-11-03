@@ -48,11 +48,7 @@
 			<Form.Control>
 				{#snippet children({ props })}
 					<Form.Label>Kode Produk</Form.Label>
-					<Input
-						{...props}
-						bind:value={$formData.code}
-						placeholder="Scan barcode produk atau ketik kode (Misal: RAB-001)"
-					/>
+					<Input {...props} bind:value={$formData.code} />
 				{/snippet}
 			</Form.Control>
 			<Form.FieldErrors />
@@ -96,10 +92,6 @@
 							<option value="XL">XL</option>
 							<option value="XXL">XXL</option>
 							<option value="XXXL">XXXL</option>
-							<option value="All Size">All Size</option>
-							<option value="110x110">110x110</option>
-							<option value="115x115">115x115</option>
-							<option value="175x75">175x75</option>
 						</select>
 					{/snippet}
 				</Form.Control>
