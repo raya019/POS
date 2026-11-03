@@ -72,7 +72,8 @@
 			: data.products.filter(
 					(p) =>
 						p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-						p.code.toLowerCase().includes(searchValue.toLowerCase())
+						p.code.toLowerCase().includes(searchValue.toLowerCase()) ||
+						p.color.toLowerCase().includes(searchValue.toLowerCase())
 				)
 	);
 
@@ -143,7 +144,7 @@
 					<Card.Root class="h-full cursor-pointer transition-colors hover:border-blue-500">
 						<Card.Header class="pb-2">
 							<Card.Title class="text-lg leading-tight">{product.name}</Card.Title>
-							<Card.Description>{product.code}</Card.Description>
+							<Card.Description>{product.code} • {product.color} • {product.size}</Card.Description>
 						</Card.Header>
 						<Card.Content>
 							<div class="font-bold text-blue-700">{formatRupiah(product.sell_price)}</div>
@@ -172,6 +173,7 @@
 				<div class="flex items-start justify-between border-b pb-4">
 					<div class="flex-1 pr-2">
 						<div class="text-sm font-bold">{item.product.name}</div>
+						<div class="text-xs text-gray-500">{item.product.color} • {item.product.size}</div>
 						<div class="mt-1 text-xs text-gray-500">{formatRupiah(item.product.sell_price)}</div>
 					</div>
 					<div class="flex items-center gap-2">

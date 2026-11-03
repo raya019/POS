@@ -5,14 +5,15 @@
 	import { formatRupiah } from '$lib';
 
 	let { data } = $props();
-	
+
 	let searchTerm = $state('');
 
 	let filteredProducts = $derived(
 		data.products.filter(
 			(p) =>
 				p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				p.code.toLowerCase().includes(searchTerm.toLowerCase())
+				p.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				p.color.toLowerCase().includes(searchTerm.toLowerCase())
 		)
 	);
 </script>
@@ -25,7 +26,7 @@
 <div class="mb-4">
 	<Input
 		bind:value={searchTerm}
-		placeholder="Cari nama atau kode produk..."
+		placeholder="Cari nama, kode, atau warna produk..."
 		class="max-w-sm bg-white"
 	/>
 </div>
@@ -38,6 +39,7 @@
 				<Table.Head>Nama Produk</Table.Head>
 				<Table.Head>Brand</Table.Head>
 				<Table.Head>Ukuran</Table.Head>
+				<Table.Head>Warna</Table.Head>
 				<Table.Head>Harga Beli</Table.Head>
 				<Table.Head>Harga Jual</Table.Head>
 				<Table.Head class="text-right">Aksi</Table.Head>
@@ -48,8 +50,9 @@
 				<Table.Row>
 					<Table.Cell class="font-medium">{product.code}</Table.Cell>
 					<Table.Cell>{product.name}</Table.Cell>
-					<Table.Cell>{product.brand || '-'}</Table.Cell>
-					<Table.Cell>{product.size || '-'}</Table.Cell>
+					<Table.Cell>{product.brand}</Table.Cell>
+					<Table.Cell>{product.size}</Table.Cell>
+					<Table.Cell>{product.color}</Table.Cell>
 					<Table.Cell>{formatRupiah(product.buyPrice)}</Table.Cell>
 					<Table.Cell>{formatRupiah(product.sellPrice)}</Table.Cell>
 					<Table.Cell class="text-right">
@@ -61,7 +64,7 @@
 				</Table.Row>
 			{:else}
 				<Table.Row>
-					<Table.Cell colspan={7} class="h-24 text-center">Belum ada data produk.</Table.Cell>
+					<Table.Cell colspan={8} class="h-24 text-center">Belum ada data produk.</Table.Cell>
 				</Table.Row>
 			{/each}
 		</Table.Body>

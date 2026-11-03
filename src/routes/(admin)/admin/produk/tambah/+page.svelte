@@ -21,7 +21,7 @@
 			},
 			onUpdate: ({ form, result }) => {
 				if (result.type === 'success') {
-					toast.success('Login berhasil');
+					toast.success('Produk berhasil ditambahkan');
 				} else {
 					toast.error(form.message);
 				}
@@ -68,12 +68,12 @@
 			<Form.FieldErrors />
 		</Form.Field>
 
-		<div class="grid grid-cols-2 gap-4">
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
 			<Form.Field {form} name="brand">
 				<Form.Control>
 					{#snippet children({ props })}
-						<Form.Label>Merek (Opsional)</Form.Label>
-						<Input {...props} bind:value={$formData.brand} />
+						<Form.Label>Merek</Form.Label>
+						<Input {...props} bind:value={$formData.brand} placeholder="Misal: Rabbani" />
 					{/snippet}
 				</Form.Control>
 				<Form.FieldErrors />
@@ -82,21 +82,35 @@
 			<Form.Field {form} name="size">
 				<Form.Control>
 					{#snippet children({ props })}
-						<Form.Label>Ukuran (Opsional)</Form.Label>
+						<Form.Label>Ukuran</Form.Label>
 						<select
 							{...props}
 							bind:value={$formData.size}
 							class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 						>
 							<option value="">-- Pilih Ukuran --</option>
-							<option value="xs">XS</option>
-							<option value="s">S</option>
-							<option value="m">M</option>
-							<option value="l">L</option>
-							<option value="xl">XL</option>
-							<option value="xxl">XXL</option>
-							<option value="xxxl">XXXL</option>
+							<option value="XS">XS</option>
+							<option value="S">S</option>
+							<option value="M">M</option>
+							<option value="L">L</option>
+							<option value="XL">XL</option>
+							<option value="XXL">XXL</option>
+							<option value="XXXL">XXXL</option>
+							<option value="All Size">All Size</option>
+							<option value="110x110">110x110</option>
+							<option value="115x115">115x115</option>
+							<option value="175x75">175x75</option>
 						</select>
+					{/snippet}
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+
+			<Form.Field {form} name="color">
+				<Form.Control>
+					{#snippet children({ props })}
+						<Form.Label>Warna</Form.Label>
+						<Input {...props} bind:value={$formData.color} placeholder="Misal: Hitam, Sage, Navy" />
 					{/snippet}
 				</Form.Control>
 				<Form.FieldErrors />

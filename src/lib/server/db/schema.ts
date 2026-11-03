@@ -72,8 +72,9 @@ export const products = pgTable('products', {
 	id: serial('id').primaryKey(),
 	code: varchar('code', { length: 20 }).notNull().unique(),
 	name: varchar('name', { length: 100 }).notNull(),
-	brand: varchar('brand', { length: 50 }),
-	size: varchar('size', { length: 10 }),
+	brand: varchar('brand', { length: 50 }).notNull(),
+	size: varchar('size', { length: 10 }).notNull(),
+	color: varchar('color', { length: 30 }).notNull(),
 	buyPrice: integer('buy_price').notNull(),
 	sellPrice: integer('sell_price').notNull(),
 

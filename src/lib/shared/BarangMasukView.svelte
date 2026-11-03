@@ -16,7 +16,8 @@
 		data.products.filter(
 			(p: any) =>
 				p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				p.code.toLowerCase().includes(searchTerm.toLowerCase())
+				p.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				(p.color && p.color.toLowerCase().includes(searchTerm.toLowerCase()))
 		)
 	);
 
@@ -64,7 +65,7 @@
 <div class="mb-4">
 	<Input
 		bind:value={searchTerm}
-		placeholder="Cari nama atau kode produk..."
+		placeholder="Cari nama, kode, atau warna produk..."
 		class="max-w-sm bg-white"
 	/>
 </div>
@@ -76,6 +77,8 @@
 				<Table.Head>Kode</Table.Head>
 				<Table.Head>Nama Produk</Table.Head>
 				<Table.Head>Brand/Merk</Table.Head>
+				<Table.Head>Ukuran</Table.Head>
+				<Table.Head>Warna</Table.Head>
 				<Table.Head class="text-right">Total Stok (Tersedia)</Table.Head>
 				<Table.Head class="text-right">Aksi</Table.Head>
 			</Table.Row>
@@ -85,7 +88,9 @@
 				<Table.Row>
 					<Table.Cell class="font-medium">{product.code}</Table.Cell>
 					<Table.Cell>{product.name}</Table.Cell>
-					<Table.Cell>{product.brand || '-'}</Table.Cell>
+					<Table.Cell>{product.brand}</Table.Cell>
+					<Table.Cell>{product.size}</Table.Cell>
+					<Table.Cell>{product.color}</Table.Cell>
 					<Table.Cell class="text-right">
 						<span
 							class="inline-flex h-6 min-w-8 items-center justify-center rounded-full bg-blue-100 px-2 text-xs font-bold text-blue-700"
@@ -101,7 +106,7 @@
 				</Table.Row>
 			{:else}
 				<Table.Row>
-					<Table.Cell colspan={5} class="h-24 text-center text-gray-500"
+					<Table.Cell colspan={7} class="h-24 text-center text-gray-500"
 						>Produk tidak ditemukan.</Table.Cell
 					>
 				</Table.Row>
@@ -120,7 +125,9 @@
 
 			<div class="mb-6 rounded-md bg-gray-50 p-3 text-sm">
 				<div class="font-medium">{selectedProduct.name}</div>
-				<div class="text-gray-500">{selectedProduct.code}</div>
+				<div class="text-gray-500">
+					{selectedProduct.code} • {selectedProduct.brand} • {selectedProduct.color} ({selectedProduct.size})
+				</div>
 			</div>
 
 			<form method="POST" action="{postUrl}?/create" use:enhance class="space-y-4">

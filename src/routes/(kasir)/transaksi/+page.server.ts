@@ -10,6 +10,9 @@ interface Product {
 	id: number;
 	code: string;
 	name: string;
+	brand: string;
+	size: string;
+	color: string;
 	sell_price: number;
 
 	total_stock: number;
@@ -18,10 +21,10 @@ interface Product {
 export const load: PageServerLoad = async () => {
 	// Ambil produk yang punya sisa stok > 0
 	const activeProducts = await db.execute(sql`
-		SELECT p.id, p.code, p.name, p.sell_price, COALESCE(SUM(se.quantity_remaining), 0) as total_stock
+		SELECT p.id, p.code, p.name, p.brand, p.size, p.color, p.sell_price, COALESCE(SUM(se.quantity_remaining), 0) as total_stock
 		FROM products p
 		LEFT JOIN stock_entries se ON p.id = se.product_id
-		GROUP BY p.id, p.code, p.name, p.sell_price
+		GROUP BY p.id, p.code, p.name, p.brand, p.size, p.color, p.sell_price
 		HAVING COALESCE(SUM(se.quantity_remaining), 0) > 0
 	`);
 

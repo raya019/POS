@@ -72,6 +72,7 @@ async function main() {
 				name: "Gamis Syar'i Khadijah",
 				brand: 'Rabbani',
 				size: 'L',
+				color: 'Hitam',
 				buyPrice: 150000,
 				sellPrice: 200000
 			}, // <-- Bintang Demo
@@ -80,6 +81,7 @@ async function main() {
 				name: 'Tunik Casual Aisyah',
 				brand: 'Rabbani',
 				size: 'M',
+				color: 'Sage Green',
 				buyPrice: 120000,
 				sellPrice: 160000
 			},
@@ -88,6 +90,7 @@ async function main() {
 				name: 'Hijab Instan Amira',
 				brand: 'Rabbani',
 				size: 'All Size',
+				color: 'Navy',
 				buyPrice: 45000,
 				sellPrice: 65000
 			},
@@ -96,6 +99,7 @@ async function main() {
 				name: 'Pashmina Ceruty Babydoll',
 				brand: 'Rabbani',
 				size: '175x75',
+				color: 'Mocca',
 				buyPrice: 35000,
 				sellPrice: 55000
 			},
@@ -104,6 +108,7 @@ async function main() {
 				name: 'Mukena Dewasa Katun',
 				brand: 'Rabbani',
 				size: 'All Size',
+				color: 'Putih',
 				buyPrice: 180000,
 				sellPrice: 250000
 			},
@@ -114,6 +119,7 @@ async function main() {
 				name: 'Bergo Maryam Premium',
 				brand: 'Zoya',
 				size: 'L',
+				color: 'Dusty Pink',
 				buyPrice: 50000,
 				sellPrice: 75000
 			},
@@ -122,6 +128,7 @@ async function main() {
 				name: 'Gamis Pesta Sabrina',
 				brand: 'Zoya',
 				size: 'XL',
+				color: 'Maroon',
 				buyPrice: 220000,
 				sellPrice: 300000
 			},
@@ -130,6 +137,7 @@ async function main() {
 				name: 'Blouse Muslimah Keisha',
 				brand: 'Zoya',
 				size: 'M',
+				color: 'Cream',
 				buyPrice: 110000,
 				sellPrice: 150000
 			},
@@ -138,6 +146,7 @@ async function main() {
 				name: 'Rok Plisket Premium',
 				brand: 'Zoya',
 				size: 'All Size',
+				color: 'Coklat Susu',
 				buyPrice: 70000,
 				sellPrice: 95000
 			},
@@ -146,6 +155,7 @@ async function main() {
 				name: 'Cardigan Rajut Panjang',
 				brand: 'Zoya',
 				size: 'L',
+				color: 'Abu-abu',
 				buyPrice: 85000,
 				sellPrice: 120000
 			},
@@ -156,6 +166,7 @@ async function main() {
 				name: 'Scarf Motif Zahrani',
 				brand: 'Elzatta',
 				size: '115x115',
+				color: 'Olive',
 				buyPrice: 60000,
 				sellPrice: 89000
 			},
@@ -164,6 +175,7 @@ async function main() {
 				name: 'Tunik Asimetris',
 				brand: 'Elzatta',
 				size: 'L',
+				color: 'Mustard',
 				buyPrice: 140000,
 				sellPrice: 185000
 			},
@@ -172,6 +184,7 @@ async function main() {
 				name: 'Gamis Daily Jersey',
 				brand: 'Elzatta',
 				size: 'M',
+				color: 'Lavender',
 				buyPrice: 130000,
 				sellPrice: 175000
 			},
@@ -180,6 +193,7 @@ async function main() {
 				name: 'Manset Baju Spandex',
 				brand: 'Elzatta',
 				size: 'All Size',
+				color: 'Hitam',
 				buyPrice: 25000,
 				sellPrice: 40000
 			},
@@ -188,6 +202,7 @@ async function main() {
 				name: 'Hijab Segi Empat Voal',
 				brand: 'Elzatta',
 				size: '110x110',
+				color: 'Burgundy',
 				buyPrice: 40000,
 				sellPrice: 60000
 			}
@@ -267,37 +282,46 @@ async function main() {
 		};
 
 		// 1. Voucher yang SEDANG BERLAKU
-		const [voucherNominal] = await db.insert(schema.vouchers).values({
-			code: 'HEMAT10K',
-			discountType: 'nominal',
-			discountValue: 10000,
-			minPurchase: 50000,
-			validFrom: getRelativeDate(-7),   // Aktif sejak 7 hari lalu
-			validUntil: getRelativeDate(30)   // Berakhir 30 hari ke depan
-		}).returning();
+		const [voucherNominal] = await db
+			.insert(schema.vouchers)
+			.values({
+				code: 'HEMAT10K',
+				discountType: 'nominal',
+				discountValue: 10000,
+				minPurchase: 50000,
+				validFrom: getRelativeDate(-7), // Aktif sejak 7 hari lalu
+				validUntil: getRelativeDate(30) // Berakhir 30 hari ke depan
+			})
+			.returning();
 
-		const [voucherPercent] = await db.insert(schema.vouchers).values({
-			code: 'DISKON20',
-			discountType: 'percent',
-			discountValue: 20,
-			minPurchase: 100000,
-			validFrom: null,                  // Tanpa batas mulai (langsung aktif)
-			validUntil: getRelativeDate(14)   // Berakhir 14 hari ke depan
-		}).returning();
+		const [voucherPercent] = await db
+			.insert(schema.vouchers)
+			.values({
+				code: 'DISKON20',
+				discountType: 'percent',
+				discountValue: 20,
+				minPurchase: 100000,
+				validFrom: null, // Tanpa batas mulai (langsung aktif)
+				validUntil: getRelativeDate(14) // Berakhir 14 hari ke depan
+			})
+			.returning();
 
-		const [voucherSpesifik] = await db.insert(schema.vouchers).values({
-			code: 'PROMORAB',
-			discountType: 'nominal',
-			discountValue: 50000,
-			minPurchase: 150000,
-			validFrom: getRelativeDate(-3),
-			validUntil: getRelativeDate(30)
-		}).returning();
+		const [voucherSpesifik] = await db
+			.insert(schema.vouchers)
+			.values({
+				code: 'PROMORAB',
+				discountType: 'nominal',
+				discountValue: 50000,
+				minPurchase: 150000,
+				validFrom: getRelativeDate(-3),
+				validUntil: getRelativeDate(30)
+			})
+			.returning();
 
 		// Mengaitkan Voucher 'PROMORAB' khusus ke 2 produk pertama dari Merek Rabbani
-		const rabbaniProducts = insertedProducts.filter(p => p.brand === 'Rabbani').slice(0, 2);
+		const rabbaniProducts = insertedProducts.filter((p) => p.brand === 'Rabbani').slice(0, 2);
 		if (rabbaniProducts.length > 0) {
-			const vpData = rabbaniProducts.map(p => ({
+			const vpData = rabbaniProducts.map((p) => ({
 				voucherId: voucherSpesifik.id,
 				productId: p.id
 			}));
@@ -312,15 +336,15 @@ async function main() {
 				discountValue: 50000,
 				minPurchase: 100000,
 				validFrom: getRelativeDate(-30), // 30 hari lalu
-				validUntil: getRelativeDate(-5)  // Sudah berakhir 5 hari lalu
+				validUntil: getRelativeDate(-5) // Sudah berakhir 5 hari lalu
 			},
 			{
 				code: 'FLASHPAST',
 				discountType: 'percent',
 				discountValue: 15,
 				minPurchase: 0,
-				validFrom: null,                 // Tanpa validFrom, hanya validUntil lewat
-				validUntil: getRelativeDate(-1)  // Berakhir kemarin
+				validFrom: null, // Tanpa validFrom, hanya validUntil lewat
+				validUntil: getRelativeDate(-1) // Berakhir kemarin
 			}
 		]);
 
@@ -331,7 +355,7 @@ async function main() {
 				discountType: 'percent',
 				discountValue: 25,
 				minPurchase: 150000,
-				validFrom: getRelativeDate(7),   // Baru aktif 7 hari ke depan
+				validFrom: getRelativeDate(7), // Baru aktif 7 hari ke depan
 				validUntil: getRelativeDate(14)
 			},
 			{
@@ -339,7 +363,7 @@ async function main() {
 				discountType: 'nominal',
 				discountValue: 20000,
 				minPurchase: 80000,
-				validFrom: getRelativeDate(3),   // Baru aktif 3 hari ke depan
+				validFrom: getRelativeDate(3), // Baru aktif 3 hari ke depan
 				validUntil: getRelativeDate(20)
 			}
 		]);
