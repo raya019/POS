@@ -18,6 +18,7 @@
 	let searchValue = $state('');
 	let cart = $state<CartItem[]>([]);
 	let voucherCode = $state('');
+	let dialogOpen = $state(false);
 
 	$effect(() => {
 		if (form?.error) {
@@ -86,8 +87,6 @@
 		const voucher = data.vouchers.find((v) => v.code === voucherCode);
 		if (!voucher) return 0;
 
-		if (voucher.minPurchase && subtotalAmount < voucher.minPurchase) return 0;
-
 		const cartItems = cart.map((c) => ({
 			productId: c.product.id,
 			subtotal: c.product.sell_price * c.qty
@@ -100,6 +99,8 @@
 
 		const eligibleSubtotal = eligibleItems.reduce((acc, i) => acc + i.subtotal, 0);
 		if (eligibleSubtotal === 0) return 0;
+
+		if (voucher.minPurchase && eligibleSubtotal < voucher.minPurchase) return 0;
 
 		if (voucher.discountType === 'percent') {
 			return eligibleItems.reduce(
@@ -117,8 +118,7 @@
 		JSON.stringify(
 			cart.map((c) => ({
 				productId: c.product.id,
-				qty: c.qty,
-				unitPrice: c.product.sell_price
+				qty: c.qty
 			}))
 		)
 	);
@@ -126,7 +126,7 @@
 
 <div class="grid h-[calc(100vh-100px)] grid-cols-1 gap-6 md:grid-cols-3">
 	<!-- Bagian Kiri: Produk & Pencarian -->
-	<div class="flex h-full flex-col gap-4 md:col-span-2 overflow-hidden">
+	<div class="flex h-full flex-col gap-4 overflow-hidden md:col-span-2">
 		<div class="flex items-center gap-2">
 			<Input
 				type="text"
@@ -138,7 +138,7 @@
 			/>
 		</div>
 
-		<div class="grid flex-1 grid-cols-2 gap-4 overflow-y-auto pb-4 lg:grid-cols-3 pr-2">
+		<div class="grid flex-1 grid-cols-2 gap-4 overflow-y-auto pr-2 pb-4 lg:grid-cols-3">
 			{#each filteredProducts as product (product.id)}
 				<button class="text-left focus:outline-none" onclick={() => addToCart(product)}>
 					<Card.Root class="h-full cursor-pointer transition-colors hover:border-blue-500">
@@ -233,7 +233,7 @@
 					</div>
 				</div>
 
-				<Dialog.Root>
+				<Dialog.Root bind:open={dialogOpen}>
 					<Dialog.Trigger disabled={cart.length === 0} class={buttonVariants({ size: 'lg' })}>
 						Checkout & Bayar
 					</Dialog.Trigger>
@@ -246,7 +246,16 @@
 								>
 							</Dialog.Description>
 							<Dialog.Footer class="gap-x-3 pt-3">
-								<form method="POST" action="?/checkout" use:enhance>
+								<form
+									method="POST"
+									action="?/checkout"
+									use:enhance={() => {
+										return async ({ update }) => {
+											dialogOpen = false;
+											await update();
+										};
+									}}
+								>
 									<input type="hidden" name="cartData" value={cartDataJSON} />
 									<input type="hidden" name="voucherCode" value={voucherCode} />
 									<Button size="lg" type="submit">Lanjutkan</Button>

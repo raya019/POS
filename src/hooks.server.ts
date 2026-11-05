@@ -11,7 +11,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handleError: HandleServerError = ({ error, event }) => {
+export const handleError: HandleServerError = ({ error, event, status }) => {
+	if (status === 404) {
+		return { message: 'Halaman atau data yang Anda cari tidak ditemukan.' };
+	}
+
 	console.error(`[${event.route.id}]`, error);
 	return { message: 'Terjadi kesalahan pada server. Coba lagi atau hubungi admin.' };
 };
