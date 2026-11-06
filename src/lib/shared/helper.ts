@@ -11,6 +11,7 @@ export function formatDate(dateString: string | Date | null | undefined): string
 	const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
 	return new Intl.DateTimeFormat('id-ID', {
 		dateStyle: 'medium',
-		timeStyle: 'short'
+		timeStyle: 'short',
+		timeZone: 'Asia/Jakarta'
 	}).format(date);
 }

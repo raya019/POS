@@ -94,7 +94,7 @@
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
-			{#each data.salesData as sale (sale.transactionCode)}
+			{#each data.salesData as sale (sale.id)}
 				<Table.Row>
 					<Table.Cell>{sale.date}</Table.Cell>
 					<Table.Cell class="font-medium">{sale.transactionCode}</Table.Cell>

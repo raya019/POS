@@ -5,7 +5,7 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	let { data }: { data: any } = $props();
 
-	const today = new Date().toISOString().split('T')[0];
+	const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
 	let dariTanggal = $state(today);
 	let keTanggal = $state(today);
 

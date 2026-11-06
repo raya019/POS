@@ -138,7 +138,7 @@
 			/>
 		</div>
 
-		<div class="grid flex-1 grid-cols-2 gap-4 overflow-y-auto pr-2 pb-4 lg:grid-cols-3">
+		<div class="grid flex-1 content-start grid-cols-2 gap-4 overflow-y-auto pr-2 pb-4 lg:grid-cols-3">
 			{#each filteredProducts as product (product.id)}
 				<button class="text-left focus:outline-none" onclick={() => addToCart(product)}>
 					<Card.Root class="h-full cursor-pointer transition-colors hover:border-blue-500">
@@ -209,7 +209,7 @@
 						{#each data.vouchers as v (v.id)}
 							<option value={v.code}
 								>{v.code} - {v.discountType === 'percent'
-									? v.discountValue + '%'
+									? `${v.discountValue}% - ${formatRupiah(v.minPurchase ?? 0)}`
 									: formatRupiah(v.discountValue)}</option
 							>
 						{/each}

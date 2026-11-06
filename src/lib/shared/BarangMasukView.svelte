@@ -43,7 +43,7 @@
 	);
 	const { form: formData, enhance, validateForm } = formObj;
 
-	const today = new Date().toISOString().split('T')[0];
+	const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
 
 	function openModal(product: any) {
 		selectedProduct = product;

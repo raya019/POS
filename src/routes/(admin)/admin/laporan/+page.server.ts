@@ -3,12 +3,17 @@ import { getSalesReport } from '$lib/server/report';
 import type { ReportRow } from '$lib/server/report.ts';
 
 export const load: PageServerLoad = async ({ url }) => {
-	// Set rentang default (bulan ini)
+	// Set rentang default (bulan ini) sesuai zona waktu Asia/Jakarta
 	const today = new Date();
-	const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-	const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0)
-		.toISOString()
-		.split('T')[0];
+	const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('en-CA', {
+		timeZone: 'Asia/Jakarta'
+	});
+	const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).toLocaleDateString(
+		'en-CA',
+		{
+			timeZone: 'Asia/Jakarta'
+		}
+	);
 
 	const from = url.searchParams.get('from') || firstDay;
 	const to = url.searchParams.get('to') || lastDay;
